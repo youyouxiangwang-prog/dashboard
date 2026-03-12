@@ -12,22 +12,25 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #12121a;
-      --bg-tertiary: #1a1a24;
-      --bg-card: #16161f;
-      --border-subtle: #2a2a3a;
-      --border-accent: #3d3d52;
-      --text-primary: #f0f0f5;
-      --text-secondary: #a0a0b0;
-      --text-muted: #606070;
-      --accent-gold: #d4af37;
-      --accent-gold-dim: #a68b2e;
-      --accent-blue: #4a9eff;
-      --accent-green: #34d399;
-      --accent-red: #f87171;
-      --accent-purple: #a78bfa;
-      --accent-orange: #fb923c;
+      /* Light Mode Theme */
+      --bg-primary: #f5f5f5;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f0f0f2;
+      --bg-card: #ffffff;
+      --border-subtle: #e5e5e8;
+      --border-accent: #d0d0d5;
+      --text-primary: #1a1a1a;
+      --text-secondary: #4a4a55;
+      --text-muted: #8a8a95;
+      --accent-gold: #b8960f;
+      --accent-gold-dim: #9a7d0d;
+      --accent-blue: #2563eb;
+      --accent-green: #059669;
+      --accent-red: #dc2626;
+      --accent-purple: #7c3aed;
+      --accent-orange: #ea580c;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
     }
     
     body {
@@ -72,6 +75,7 @@
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
       overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
     
     .card-header {
@@ -206,9 +210,13 @@
       margin-bottom: 0.5rem;
       background: var(--bg-secondary);
       transition: all 0.15s;
+      border: 1px solid var(--border-subtle);
     }
     
-    .task-item:hover { background: var(--bg-tertiary); }
+    .task-item:hover { 
+      background: var(--bg-tertiary); 
+      box-shadow: var(--shadow-sm);
+    }
     .task-item:last-child { margin-bottom: 0; }
     
     .task-checkbox {
@@ -296,21 +304,21 @@
     }
     
     .kb-category-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.875rem;
     }
     
-    .kb-category-icon.tech { background: rgba(74, 158, 255, 0.15); }
-    .kb-category-icon.personal { background: rgba(167, 139, 250, 0.15); }
-    .kb-category-icon.projects { background: rgba(212, 175, 55, 0.15); }
-    .kb-category-icon.finance { background: rgba(52, 211, 153, 0.15); }
-    .kb-category-icon.health { background: rgba(248, 113, 113, 0.15); }
-    .kb-category-icon.misc { background: rgba(160, 160, 176, 0.15); }
+    .kb-category-icon.tech { background: rgba(37, 99, 235, 0.12); color: #2563eb; }
+    .kb-category-icon.personal { background: rgba(124, 58, 237, 0.12); color: #7c3aed; }
+    .kb-category-icon.projects { background: rgba(184, 150, 15, 0.12); color: #b8960f; }
+    .kb-category-icon.finance { background: rgba(5, 150, 105, 0.12); color: #059669; }
+    .kb-category-icon.health { background: rgba(220, 38, 38, 0.12); color: #dc2626; }
+    .kb-category-icon.misc { background: rgba(138, 138, 149, 0.12); color: #8a8a95; }
     
     .kb-category-name {
       font-size: 0.8125rem;
@@ -334,42 +342,89 @@
     }
     
     .kb-item {
-      padding: 0.625rem;
+      padding: 0.875rem;
       background: var(--bg-secondary);
-      border-radius: 6px;
-      margin-bottom: 0.375rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
       cursor: pointer;
       transition: all 0.15s;
     }
     
-    .kb-item:hover { background: var(--bg-tertiary); }
+    .kb-item:hover { 
+      background: var(--bg-tertiary); 
+      box-shadow: var(--shadow-sm);
+      border-color: var(--accent-blue);
+    }
+    
+    .kb-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
     
     .kb-item-name {
-      font-size: 0.75rem;
-      font-weight: 500;
+      font-size: 0.9375rem;
+      font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 0.25rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin-bottom: 0;
+    }
+    
+    .kb-item-source {
+      font-size: 0.6875rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      font-weight: 500;
     }
     
     .kb-item-summary {
-      font-size: 0.6875rem;
-      color: var(--text-muted);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      margin-bottom: 0.625rem;
     }
     
     .kb-item-meta {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.375rem;
-      font-size: 0.625rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    
+    .kb-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.6875rem;
       color: var(--text-muted);
+    }
+    
+    .kb-meta-item i {
+      font-size: 0.625rem;
+    }
+    
+    .kb-tags {
+      display: flex;
+      gap: 0.375rem;
+      flex-wrap: wrap;
+    }
+    
+    .kb-tag {
+      font-size: 0.5625rem;
+      padding: 0.125rem 0.375rem;
+      border-radius: 3px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 0.025em;
     }
     
     /* Stats Widgets */
@@ -634,6 +689,7 @@
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
       margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
     }
     
     .header-left {
@@ -880,14 +936,14 @@
     let kbData = null;
     let kbPieChart = null;
     
-    // Category colors
+    // Category colors - Light mode optimized
     const categoryColors = {
-      tech: { bg: 'rgba(74, 158, 255, 0.2)', border: '#4a9eff', icon: '💻' },
-      personal: { bg: 'rgba(167, 139, 250, 0.2)', border: '#a78bfa', icon: '👤' },
-      projects: { bg: 'rgba(212, 175, 55, 0.2)', border: '#d4af37', icon: '📁' },
-      finance: { bg: 'rgba(52, 211, 153, 0.2)', border: '#34d399', icon: '💰' },
-      health: { bg: 'rgba(248, 113, 113, 0.2)', border: '#f87171', icon: '❤️' },
-      misc: { bg: 'rgba(160, 160, 176, 0.2)', border: '#a0a0b0', icon: '📝' }
+      tech: { bg: 'rgba(37, 99, 235, 0.1)', border: '#2563eb', icon: '💻' },
+      personal: { bg: 'rgba(124, 58, 237, 0.1)', border: '#7c3aed', icon: '👤' },
+      projects: { bg: 'rgba(184, 150, 15, 0.1)', border: '#b8960f', icon: '📁' },
+      finance: { bg: 'rgba(5, 150, 105, 0.1)', border: '#059669', icon: '💰' },
+      health: { bg: 'rgba(220, 38, 38, 0.1)', border: '#dc2626', icon: '❤️' },
+      misc: { bg: 'rgba(138, 138, 149, 0.1)', border: '#8a8a95', icon: '📝' }
     };
     
     // Initialize
@@ -1048,7 +1104,7 @@
       }
     }
     
-    // Knowledge Feed
+    // Knowledge Feed - Enhanced with more metadata
     function renderKnowledgeFeed() {
       if (!kbData || !kbData.categoryData) {
         document.getElementById('knowledgeFeed').innerHTML = '<div class="text-center text-muted" style="padding: 1rem;">No knowledge items</div>';
@@ -1067,18 +1123,23 @@
         html += `
           <div class="kb-category">
             <div class="kb-category-header">
-              <div class="kb-category-icon ${cat}" style="background: ${color.bg}">${color.icon}</div>
+              <div class="kb-category-icon ${cat}" style="background: ${color.bg}; color: ${color.border}">${color.icon}</div>
               <span class="kb-category-name">${data.name}</span>
-              <span class="kb-category-count">${data.count}</span>
+              <span class="kb-category-count">${data.count} items</span>
             </div>
             ${data.empty ? '<div class="kb-empty">No items in this category</div>' : ''}
-            ${data.items ? data.items.slice(0, 3).map(item => `
-              <div class="kb-item">
-                <div class="kb-item-name">${escapeHtml(item.name)}</div>
-                <div class="kb-item-summary">${escapeHtml(item.summary)}</div>
+            ${data.items ? data.items.slice(0, 4).map(item => `
+              <div class="kb-item" onclick="openKbItem('${escapeHtml(item.id || '')}')">
+                <div class="kb-item-header">
+                  <div class="kb-item-name">${escapeHtml(item.name)}</div>
+                  <span class="kb-item-source">${item.source || 'Local'}</span>
+                </div>
+                <div class="kb-item-summary">${escapeHtml(item.summary || item.excerpt || 'No description available')}</div>
                 <div class="kb-item-meta">
-                  <span><i class="fas fa-file-${item.type === 'md' ? '-alt' : 'code'}"></i> ${item.type}</span>
-                  <span>${formatDate(item.modified)}</span>
+                  <span class="kb-meta-item"><i class="fas fa-calendar"></i> ${formatDateFull(item.modified || item.created)}</span>
+                  <span class="kb-meta-item"><i class="fas fa-file-${item.type === 'md' ? '-alt' : 'code'}"></i> ${item.type?.toUpperCase() || 'FILE'}</span>
+                  <span class="kb-meta-item"><i class="fas fa-folder"></i> ${cat}</span>
+                  ${item.tags ? `<div class="kb-tags">${(item.tags || []).slice(0, 3).map(tag => `<span class="kb-tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
                 </div>
               </div>
             `).join('') : ''}
@@ -1091,6 +1152,12 @@
       }
       
       document.getElementById('knowledgeFeed').innerHTML = html;
+    }
+    
+    // Open KB item - placeholder for navigation
+    function openKbItem(itemId) {
+      console.log('Opening KB item:', itemId);
+      // Could redirect to the actual KB item URL
     }
     
     // Stats
@@ -1217,6 +1284,19 @@
       if (!dateStr) return '';
       const date = new Date(dateStr);
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    
+    function formatDateFull(dateStr) {
+      if (!dateStr) return 'Unknown date';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = now - date;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      if (days === 0) return 'Today';
+      if (days === 1) return 'Yesterday';
+      if (days < 7) return `${days} days ago`;
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
   </script>
 </body>
