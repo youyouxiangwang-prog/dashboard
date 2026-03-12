@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Files - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc; 
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { 
+      font-size: 1.5rem; 
+      font-weight: 600; 
+      margin-bottom: 2rem;
+      color: #0f172a;
+    }
+    .section { margin-bottom: 2rem; }
+    .section-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .item-icon { margin-right: 1rem; font-size: 1.5rem; }
+    .item-content { flex: 1; }
+    .item-title { font-weight: 500; color: #1e293b; }
+    .item-meta { font-size: 0.875rem; color: #64748b; }
+    .empty { color: #94a3b8; font-style: italic; }
+    .nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .nav a {
+      text-decoration: none;
+      color: #64748b;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .nav a:hover { background: #f1f5f9; color: #1e293b; }
+    .nav a.active { background: #1e293b; color: white; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="/">📋 Tasks</a>
+      <a href="/events.html">📅 Events</a>
+      <a href="/chronological.html">📊 Timeline</a>
+      <a href="/files.html" class="active">📁 Files</a>
+    </nav>
+    
+    <h1>📁 Files</h1>
+    <p style="color: #64748b; margin-bottom: 1rem;">Upload folder: /home/ubuntu/clawd/uploads/</p>
+    
+    <div class="section">
+      <div class="section-title">Uploaded Files</div>
+      <div id="files"></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadFiles() {
+      const container = document.getElementById('files');
+      const res = await fetch('/api/files');
+      const files = await res.json();
+      
+      if (files.length === 0) {
+        container.innerHTML = '<div class="empty">No files uploaded yet</div>';
+        return;
+      }
+      
+      const icons = {
+        pdf: '📕', doc: '📘', docx: '📘', txt: '📄',
+        jpg: '🖼️', jpeg: '🖼️', png: '🖼️', gif: '🖼️', svg: '🖼️',
+        mp3: '🎵', wav: '🎵', mp4: '🎬', zip: '📦', rar: '📦'
+      };
+      
+      const getIcon = (name) => {
+        const ext = name.split('.').pop().toLowerCase();
+        return icons[ext] || '📄';
+      };
+      
+      container.innerHTML = files.map(f => `
+        <div class="item">
+          <div class="item-icon">${getIcon(f.name)}</div>
+          <div class="item-content">
+            <div class="item-title">${f.name}</div>
+            <div class="item-meta">${f.size} • ${f.modified}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    loadFiles();
+  </script>
+</body>
+</html>

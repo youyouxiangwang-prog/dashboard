@@ -1,0 +1,193 @@
+/* Custom styles for dashboard */
+
+/* Category badge colors */
+.category-Work {
+  background-color: #ef4444;
+  color: white;
+}
+
+.category-Personal {
+  background-color: #22c55e;
+  color: white;
+}
+
+.category-YouTube {
+  background-color: #ff0000;
+  color: white;
+}
+
+.category-SaaS {
+  background-color: #8b5cf6;
+  color: white;
+}
+
+.category-AI {
+  background-color: linear-gradient(135deg, #06b6d4, #3b82f6);
+  color: white;
+}
+
+.category-AI-Education {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  color: white;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Task item hover effect */
+.task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Drop zone active state */
+#dropZone.dragover {
+  border-color: #0ea5e9;
+  background-color: rgba(14, 165, 233, 0.1);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Animation for loading states */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Filter button active state */
+.filter-btn.active {
+  background-color: #0ea5e9;
+  color: white;
+}
+
+/* Completed task styling */
+.task-completed .task-title {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.task-completed {
+  opacity: 0.7;
+}
+
+/* Modal backdrop blur */
+#editModal {
+  backdrop-filter: blur(4px);
+}
+
+/* Event card styling */
+.event-card {
+  border-left: 4px solid #0ea5e9;
+}
+
+.event-card:hover {
+  background-color: #f8fafc;
+}
+
+.dark .event-card:hover {
+  background-color: #1e293b;
+}
+
+/* Stagger animation for tasks */
+.task-item {
+  animation: slideIn 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid-cols-1.md\:grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Focus styles */
+input:focus, select:focus, button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+}
+
+/* Light mode overrides for gradient badges in dark mode */
+.dark .category-AI-Education {
+  background: linear-gradient(135deg, #22d3ee, #60a5fa);
+}
+
+/* Toast notification styles */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  z-index: 100;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.toast-success {
+  background-color: #22c55e;
+}
+
+.toast-error {
+  background-color: #ef4444;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
