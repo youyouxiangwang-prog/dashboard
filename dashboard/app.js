@@ -1,6 +1,7 @@
 // Dashboard App - Reads from KB index.json
 
-const KB_INDEX_PATH = '../kb/index.json';
+// Fetch from GitHub raw content (workspace KB data)
+const KB_INDEX_PATH = 'https://raw.githubusercontent.com/youyouxiangwang-prog/dashboard/master/kb/index.json';
 
 async function loadDashboard() {
     try {
