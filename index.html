@@ -3,191 +3,1221 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Dashboard | Soul-Cap</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=MedievalSharp&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-tertiary: #1a1a24;
+      --bg-card: #16161f;
+      --border-subtle: #2a2a3a;
+      --border-accent: #3d3d52;
+      --text-primary: #f0f0f5;
+      --text-secondary: #a0a0b0;
+      --text-muted: #606070;
+      --accent-gold: #d4af37;
+      --accent-gold-dim: #a68b2e;
+      --accent-blue: #4a9eff;
+      --accent-green: #34d399;
+      --accent-red: #f87171;
+      --accent-purple: #a78bfa;
+      --accent-orange: #fb923c;
+    }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
       min-height: 100vh;
-      color: #e2e8f0;
-      padding: 1.5rem;
+      color: var(--text-primary);
+      line-height: 1.5;
     }
-    .container { max-width: 900px; margin: 0 auto; }
     
-    h1, h2, h3 { font-family: 'Cinzel', serif; }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold-dim); }
     
-    .section {
-      background: linear-gradient(145deg, rgba(30, 30, 60, 0.9), rgba(20, 20, 40, 0.95));
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-radius: 12px;
+    /* Layout */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 320px 1fr 340px;
+      gap: 1.25rem;
       padding: 1.25rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 215, 0, 0.1);
+      min-height: 100vh;
+      max-width: 1920px;
+      margin: 0 auto;
     }
     
-    .section-title {
-      font-family: 'MedievalSharp', cursive;
-      font-size: 1rem;
-      color: #d4af37;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    @media (max-width: 1400px) {
+      .dashboard { grid-template-columns: 280px 1fr 300px; }
     }
     
-    /* Stats Cards */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 1rem;
+    @media (max-width: 1100px) {
+      .dashboard { grid-template-columns: 1fr; }
     }
-    .stat-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 1rem;
-      text-align: center;
-    }
-    .stat-number {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #d4af37;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .stat-card.completed .stat-number { color: #10b981; }
-    .stat-card.remaining .stat-number { color: #f59e0b; }
     
-    /* Knowledge Base */
-    .kb-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
+    /* Column containers */
+    .col { display: flex; flex-direction: column; gap: 1.25rem; }
+    
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
     }
-    .kb-item {
+    
+    .card-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      justify-content: space-between;
     }
-    .kb-name { font-size: 0.875rem; color: #e2e8f0; }
-    .kb-count {
-      background: rgba(212, 175, 55, 0.2);
-      color: #d4af37;
-      padding: 0.25rem 0.75rem;
+    
+    .card-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .card-title i { color: var(--accent-gold); }
+    
+    .card-body { padding: 1rem 1.25rem; }
+    
+    /* Status badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
       border-radius: 9999px;
       font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .status-badge.completed { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+    .status-badge.pending { background: rgba(251, 146, 60, 0.15); color: var(--accent-orange); }
+    .status-badge.upcoming { background: rgba(74, 158, 255, 0.15); color: var(--accent-blue); }
+    
+    /* Quick Stats */
+    .quick-stats {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .quick-stat {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .quick-stat-num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .quick-stat-num.finished { color: var(--accent-green); }
+    .quick-stat-num.pending { color: var(--accent-orange); }
+    
+    .quick-stat-label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    
+    /* Calendar Grid */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    
+    .calendar-header {
+      text-align: center;
+      font-size: 0.625rem;
       font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0.5rem 0;
+    }
+    
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    
+    .calendar-day:hover { background: var(--bg-tertiary); }
+    .calendar-day.other-month { color: var(--text-muted); opacity: 0.5; }
+    .calendar-day.today { background: var(--accent-gold); color: var(--bg-primary); font-weight: 600; }
+    .calendar-day.today::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      width: 4px;
+      height: 4px;
+      background: var(--bg-primary);
+      border-radius: 50%;
+    }
+    .calendar-day.has-event::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 5px;
+      height: 5px;
+      background: var(--accent-blue);
+      border-radius: 50%;
     }
     
     /* Task List */
-    .task-list { margin-top: 1rem; }
+    .task-list { max-height: 320px; overflow-y: auto; }
+    
     .task-item {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 6px;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 8px;
       margin-bottom: 0.5rem;
+      background: var(--bg-secondary);
+      transition: all 0.15s;
     }
-    .task-title { font-size: 0.875rem; }
+    
+    .task-item:hover { background: var(--bg-tertiary); }
+    .task-item:last-child { margin-bottom: 0; }
+    
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border-accent);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      margin-top: 2px;
+    }
+    
+    .task-checkbox:hover { border-color: var(--accent-gold); }
+    .task-checkbox.checked { background: var(--accent-green); border-color: var(--accent-green); }
+    .task-checkbox.checked i { color: var(--bg-primary); font-size: 0.625rem; }
+    
+    .task-content { flex: 1; min-width: 0; }
+    
+    .task-title {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.125rem;
+    }
+    
+    .task-item.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
+    
     .task-meta {
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-top: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.6875rem;
+      color: var(--text-muted);
     }
-    .task-badge {
-      font-size: 0.625rem;
+    
+    .priority-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    
+    .priority-dot.high { background: var(--accent-red); }
+    .priority-dot.medium { background: var(--accent-orange); }
+    .priority-dot.low { background: var(--accent-blue); }
+    
+    /* Category Tags */
+    .category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
       padding: 0.125rem 0.5rem;
       border-radius: 4px;
-      margin-left: 0.5rem;
+      font-size: 0.625rem;
+      font-weight: 500;
+      text-transform: uppercase;
     }
-    .badge-Work { background: #3b82f6; color: white; }
-    .badge-Personal { background: #ec4899; color: white; }
-    .badge-YouTube { background: #f59e0b; color: white; }
-    .badge-SaaS { background: #10b981; color: white; }
-    .badge-AI { background: #8b5cf6; color: white; }
     
-    .empty { color: #64748b; font-size: 0.875rem; font-style: italic; }
+    .category-tag.work { background: rgba(74, 158, 255, 0.15); color: var(--accent-blue); }
+    .category-tag.personal { background: rgba(167, 139, 250, 0.15); color: var(--accent-purple); }
+    .category-tag.projects { background: rgba(212, 175, 55, 0.15); color: var(--accent-gold); }
+    .category-tag.finance { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+    .category-tag.health { background: rgba(248, 113, 113, 0.15); color: var(--accent-red); }
+    .category-tag.misc { background: rgba(160, 160, 176, 0.15); color: var(--text-secondary); }
+    
+    /* Knowledge Feed */
+    .knowledge-feed { max-height: 500px; overflow-y: auto; }
+    
+    .kb-category {
+      margin-bottom: 1rem;
+    }
+    
+    .kb-category:last-child { margin-bottom: 0; }
+    
+    .kb-category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    
+    .kb-category-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+    }
+    
+    .kb-category-icon.tech { background: rgba(74, 158, 255, 0.15); }
+    .kb-category-icon.personal { background: rgba(167, 139, 250, 0.15); }
+    .kb-category-icon.projects { background: rgba(212, 175, 55, 0.15); }
+    .kb-category-icon.finance { background: rgba(52, 211, 153, 0.15); }
+    .kb-category-icon.health { background: rgba(248, 113, 113, 0.15); }
+    .kb-category-icon.misc { background: rgba(160, 160, 176, 0.15); }
+    
+    .kb-category-name {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      flex: 1;
+    }
+    
+    .kb-category-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--bg-tertiary);
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+    }
+    
+    .kb-empty {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 0.5rem 0;
+    }
+    
+    .kb-item {
+      padding: 0.625rem;
+      background: var(--bg-secondary);
+      border-radius: 6px;
+      margin-bottom: 0.375rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    
+    .kb-item:hover { background: var(--bg-tertiary); }
+    
+    .kb-item-name {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .kb-item-summary {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .kb-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.375rem;
+      font-size: 0.625rem;
+      color: var(--text-muted);
+    }
+    
+    /* Stats Widgets */
+    .stat-card {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .stat-card:last-child { margin-bottom: 0; }
+    
+    .stat-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    
+    .stat-card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .stat-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+    }
+    
+    .stat-card-icon.gold { background: rgba(212, 175, 55, 0.15); color: var(--accent-gold); }
+    .stat-card-icon.blue { background: rgba(74, 158, 255, 0.15); color: var(--accent-blue); }
+    .stat-card-icon.green { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+    .stat-card-icon.purple { background: rgba(167, 139, 250, 0.15); color: var(--accent-purple); }
+    
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Progress Bars */
+    .progress-container {
+      margin-top: 0.5rem;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-fill.gold { background: var(--accent-gold); }
+    .progress-fill.green { background: var(--accent-green); }
+    .progress-fill.blue { background: var(--accent-blue); }
+    .progress-fill.purple { background: var(--accent-purple); }
+    
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.6875rem;
+      margin-top: 0.375rem;
+    }
+    
+    .progress-label span:first-child { color: var(--text-secondary); }
+    .progress-label span:last-child { color: var(--text-muted); }
+    
+    /* Category Breakdown */
+    .category-breakdown { margin-top: 0.75rem; }
+    
+    .category-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    
+    .category-row:last-child { border-bottom: none; }
+    
+    .category-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    
+    .category-info { flex: 1; }
+    
+    .category-name {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .category-bar {
+      flex: 2;
+      height: 4px;
+      background: var(--bg-tertiary);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .category-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+    }
+    
+    .category-count {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 24px;
+      text-align: right;
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+      padding: 0.5rem 0.875rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: var(--accent-gold);
+      color: var(--bg-primary);
+    }
+    
+    .btn-primary:hover { background: var(--accent-gold-dim); }
+    
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+    
+    .btn-ghost:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    
+    .btn-sm { padding: 0.375rem 0.625rem; font-size: 0.6875rem; }
+    
+    /* Add Task Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+    
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      padding: 1.5rem;
+      transform: scale(0.95);
+      transition: transform 0.2s;
+    }
+    
+    .modal-overlay.active .modal { transform: scale(1); }
+    
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .form-group { margin-bottom: 1rem; }
+    
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.375rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+    }
+    
+    .form-select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+    }
+    
+    /* Header */
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      margin-bottom: 1.25rem;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .header-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .header-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .time-display {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+    
+    .loading i {
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Pie Chart Container */
+    .chart-container {
+      position: relative;
+      height: 140px;
+      margin: 0.5rem 0;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 style="text-align: center; color: #d4af37; margin-bottom: 1.5rem;">✨ Dashboard ✨</h1>
-    
-    <!-- Task Statistics -->
-    <div class="section">
-      <div class="section-title">📊 Task Statistics</div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number" id="totalTasks">-</div>
-          <div class="stat-label">Total</div>
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-left">
+      <div>
+        <div class="header-title">Dashboard</div>
+        <div class="header-subtitle">Your personal command center</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="time-display" id="currentTime"></span>
+    </div>
+  </div>
+  
+  <div class="dashboard">
+    <!-- Left Column: Calendar & Tasks -->
+    <div class="col">
+      <!-- Quick Stats -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-tasks"></i> Task Overview</span>
         </div>
-        <div class="stat-card completed">
-          <div class="stat-number" id="completedTasks">-</div>
-          <div class="stat-label">Completed</div>
-        </div>
-        <div class="stat-card remaining">
-          <div class="stat-number" id="remainingTasks">-</div>
-          <div class="stat-label">Remaining</div>
+        <div class="card-body">
+          <div class="quick-stats">
+            <div class="quick-stat">
+              <div class="quick-stat-num finished" id="finishedCount">0</div>
+              <div class="quick-stat-label">Finished</div>
+            </div>
+            <div class="quick-stat">
+              <div class="quick-stat-num pending" id="pendingCount">0</div>
+              <div class="quick-stat-label">Pending</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="task-list" id="taskList"></div>
+      
+      <!-- Calendar -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-calendar-alt"></i> Calendar</span>
+          <span id="calendarMonth" class="text-sm text-muted"></span>
+        </div>
+        <div class="card-body">
+          <div class="calendar-grid" id="calendarGrid">
+            <!-- Calendar generated by JS -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- To-Do List -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-check-circle"></i> To-Do</span>
+          <button class="btn btn-primary btn-sm" onclick="openModal()">
+            <i class="fas fa-plus"></i> Add Task
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="task-list" id="taskList">
+            <div class="loading"><i class="fas fa-spinner"></i></div>
+          </div>
+        </div>
+      </div>
     </div>
     
-    <!-- Knowledge Base -->
-    <div class="section">
-      <div class="section-title">📚 Knowledge Base</div>
-      <div class="kb-grid" id="kbGrid">
-        <div class="kb-item"><span class="kb-name">📝 Memory Files</span><span class="kb-count">11</span></div>
-        <div class="kb-item"><span class="kb-name">📄 Documents</span><span class="kb-count">14</span></div>
-        <div class="kb-item"><span class="kb-name">💾 Uploaded Files</span><span class="kb-count">0</span></div>
-        <div class="kb-item"><span class="kb-name">📅 Events</span><span class="kb-count">0</span></div>
+    <!-- Middle Column: Knowledge Stream -->
+    <div class="col">
+      <div class="card" style="flex:1;">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-brain"></i> Knowledge Stream</span>
+          <span class="text-xs text-muted">Key takeaways from your KB</span>
+        </div>
+        <div class="card-body">
+          <div class="knowledge-feed" id="knowledgeFeed">
+            <div class="loading"><i class="fas fa-spinner"></i></div>
+          </div>
+        </div>
       </div>
+    </div>
+    
+    <!-- Right Column: Stats & Analytics -->
+    <div class="col">
+      <!-- KB Stats Card -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-chart-pie"></i> Knowledge Base</span>
+        </div>
+        <div class="card-body">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Total Items</span>
+              <div class="stat-card-icon gold"><i class="fas fa-folder"></i></div>
+            </div>
+            <div class="stat-value" id="kbTotalItems">0</div>
+            <div class="stat-label">Across all categories</div>
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="kbPieChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Category Breakdown -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-chart-bar"></i> Category Breakdown</span>
+        </div>
+        <div class="card-body">
+          <div class="category-breakdown" id="categoryBreakdown">
+            <!-- Generated by JS -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tasks Progress -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-tasks"></i> Task Progress</span>
+        </div>
+        <div class="card-body">
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>Completion Rate</span>
+              <span id="taskProgressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill green" id="taskProgressBar" style="width: 0%"></div>
+            </div>
+          </div>
+          
+          <div class="stat-card" style="margin-top: 1rem;">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Events This Week</span>
+              <div class="stat-card-icon blue"><i class="fas fa-calendar-check"></i></div>
+            </div>
+            <div class="stat-value" id="upcomingEvents">0</div>
+            <div class="stat-label">Upcoming events</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Add Task Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-title">Add New Task</div>
+      <form id="addTaskForm">
+        <div class="form-group">
+          <label class="form-label">Task Title</label>
+          <input type="text" class="form-input" id="taskTitle" placeholder="Enter task title..." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="taskCategory">
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Projects">Projects</option>
+            <option value="Finance">Finance</option>
+            <option value="Health">Health</option>
+            <option value="Misc">Misc</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select class="form-select" id="taskPriority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Due Date (optional)</label>
+          <input type="date" class="form-input" id="taskDueDate">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Task</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <script>
-    async function loadDashboard() {
-      const res = await fetch('/api/tasks');
-      const tasks = await res.json();
-      
-      const total = tasks.length;
-      const completed = tasks.filter(t => t.completed).length;
-      const remaining = total - completed;
-      
-      document.getElementById('totalTasks').textContent = total;
-      document.getElementById('completedTasks').textContent = completed;
-      document.getElementById('remainingTasks').textContent = remaining;
-      
-      const taskList = document.getElementById('taskList');
-      if (tasks.length === 0) {
-        taskList.innerHTML = '<div class="empty">No tasks</div>';
-      } else {
-        taskList.innerHTML = tasks.map(t => `
-          <div class="task-item">
-            <div>
-              <div class="task-title">${t.completed ? '✓ ' : '○ '}${t.title}</div>
-              <div class="task-meta">Due: ${t.dueDate || 'No date'} • Priority: ${t.priority}</div>
-            </div>
-            <span class="task-badge badge-${t.category}">${t.category}</span>
-          </div>
-        `).join('');
+    // State
+    let tasks = [];
+    let events = [];
+    let kbData = null;
+    let kbPieChart = null;
+    
+    // Category colors
+    const categoryColors = {
+      tech: { bg: 'rgba(74, 158, 255, 0.2)', border: '#4a9eff', icon: '💻' },
+      personal: { bg: 'rgba(167, 139, 250, 0.2)', border: '#a78bfa', icon: '👤' },
+      projects: { bg: 'rgba(212, 175, 55, 0.2)', border: '#d4af37', icon: '📁' },
+      finance: { bg: 'rgba(52, 211, 153, 0.2)', border: '#34d399', icon: '💰' },
+      health: { bg: 'rgba(248, 113, 113, 0.2)', border: '#f87171', icon: '❤️' },
+      misc: { bg: 'rgba(160, 160, 176, 0.2)', border: '#a0a0b0', icon: '📝' }
+    };
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      updateTime();
+      setInterval(updateTime, 1000);
+      loadData();
+    });
+    
+    function updateTime() {
+      const now = new Date();
+      const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      document.getElementById('currentTime').textContent = now.toLocaleDateString('en-US', options);
+    }
+    
+    async function loadData() {
+      try {
+        const [tasksRes, eventsRes, kbRes, statsRes] = await Promise.all([
+          fetch('/api/tasks'),
+          fetch('/api/events'),
+          fetch('/api/knowledge'),
+          fetch('/api/stats')
+        ]);
+        
+        const tasksData = await tasksRes.json();
+        tasks = tasksData.tasks || [];
+        
+        events = await eventsRes.json();
+        
+        kbData = await kbRes.json();
+        
+        const stats = await statsRes.json();
+        
+        // Render everything
+        renderCalendar();
+        renderTasks();
+        renderKnowledgeFeed();
+        renderStats(stats);
+        
+      } catch (err) {
+        console.error('Error loading data:', err);
       }
     }
     
-    loadDashboard();
+    // Calendar
+    function renderCalendar() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      
+      document.getElementById('calendarMonth').textContent = `${monthNames[month]} ${year}`;
+      
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const daysInPrevMonth = new Date(year, month, 0).getDate();
+      
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      let html = dayNames.map(d => `<div class="calendar-header">${d}</div>`).join('');
+      
+      // Previous month days
+      for (let i = firstDay - 1; i >= 0; i--) {
+        html += `<div class="calendar-day other-month">${daysInPrevMonth - i}</div>`;
+      }
+      
+      // Current month days
+      const today = now.getDate();
+      for (let i = 1; i <= daysInMonth; i++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const hasEvent = events.some(e => e.date === dateStr);
+        const isToday = i === today;
+        
+        html += `<div class="calendar-day${isToday ? ' today' : ''}${hasEvent ? ' has-event' : ''}">${i}</div>`;
+      }
+      
+      // Next month days
+      const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+      const remaining = totalCells - (firstDay + daysInMonth);
+      for (let i = 1; i <= remaining; i++) {
+        html += `<div class="calendar-day other-month">${i}</div>`;
+      }
+      
+      document.getElementById('calendarGrid').innerHTML = html;
+    }
+    
+    // Tasks
+    function renderTasks() {
+      // Sort by due date, then by priority
+      const sortedTasks = [...tasks].sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
+        if (a.dueDate) return -1;
+        if (b.dueDate) return 1;
+        const priorityOrder = { high: 0, medium: 1, low: 2 };
+        return priorityOrder[a.priority] - priorityOrder[b.priority];
+      });
+      
+      const pending = tasks.filter(t => !t.completed).length;
+      const finished = tasks.filter(t => t.completed).length;
+      
+      document.getElementById('finishedCount').textContent = finished;
+      document.getElementById('pendingCount').textContent = pending;
+      
+      // Progress
+      const total = tasks.length;
+      const percent = total > 0 ? Math.round((finished / total) * 100) : 0;
+      document.getElementById('taskProgressPercent').textContent = `${percent}%`;
+      document.getElementById('taskProgressBar').style.width = `${percent}%`;
+      
+      if (sortedTasks.length === 0) {
+        document.getElementById('taskList').innerHTML = '<div class="text-center text-muted" style="padding: 1rem;">No tasks yet</div>';
+        return;
+      }
+      
+      const html = sortedTasks.map(task => {
+        const categoryClass = task.category?.toLowerCase() || 'misc';
+        const priorityClass = task.priority || 'medium';
+        
+        return `
+          <div class="task-item ${task.completed ? 'completed' : ''}" data-id="${task.id}">
+            <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask('${task.id}')">
+              ${task.completed ? '<i class="fas fa-check"></i>' : ''}
+            </div>
+            <div class="task-content">
+              <div class="task-title">${escapeHtml(task.title)}</div>
+              <div class="task-meta">
+                <span class="priority-dot ${priorityClass}"></span>
+                <span class="category-tag ${categoryClass}">${task.category || 'Work'}</span>
+                ${task.dueDate ? `<span><i class="fas fa-calendar"></i> ${formatDate(task.dueDate)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('taskList').innerHTML = html;
+    }
+    
+    async function toggleTask(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      
+      try {
+        const res = await fetch(`/api/tasks/${taskId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ completed: !task.completed })
+        });
+        
+        if (res.ok) {
+          task.completed = !task.completed;
+          renderTasks();
+        }
+      } catch (err) {
+        console.error('Error toggling task:', err);
+      }
+    }
+    
+    // Knowledge Feed
+    function renderKnowledgeFeed() {
+      if (!kbData || !kbData.categoryData) {
+        document.getElementById('knowledgeFeed').innerHTML = '<div class="text-center text-muted" style="padding: 1rem;">No knowledge items</div>';
+        return;
+      }
+      
+      const categories = ['tech', 'personal', 'projects', 'finance', 'health', 'misc'];
+      let html = '';
+      
+      categories.forEach(cat => {
+        const data = kbData.categoryData[cat];
+        if (!data) return;
+        
+        const color = categoryColors[cat];
+        
+        html += `
+          <div class="kb-category">
+            <div class="kb-category-header">
+              <div class="kb-category-icon ${cat}" style="background: ${color.bg}">${color.icon}</div>
+              <span class="kb-category-name">${data.name}</span>
+              <span class="kb-category-count">${data.count}</span>
+            </div>
+            ${data.empty ? '<div class="kb-empty">No items in this category</div>' : ''}
+            ${data.items ? data.items.slice(0, 3).map(item => `
+              <div class="kb-item">
+                <div class="kb-item-name">${escapeHtml(item.name)}</div>
+                <div class="kb-item-summary">${escapeHtml(item.summary)}</div>
+                <div class="kb-item-meta">
+                  <span><i class="fas fa-file-${item.type === 'md' ? '-alt' : 'code'}"></i> ${item.type}</span>
+                  <span>${formatDate(item.modified)}</span>
+                </div>
+              </div>
+            `).join('') : ''}
+          </div>
+        `;
+      });
+      
+      if (!html) {
+        html = '<div class="text-center text-muted" style="padding: 1rem;">No knowledge items yet</div>';
+      }
+      
+      document.getElementById('knowledgeFeed').innerHTML = html;
+    }
+    
+    // Stats
+    function renderStats(stats) {
+      if (!stats) return;
+      
+      // KB Total
+      document.getElementById('kbTotalItems').textContent = stats.knowledgeBase?.totalItems || 0;
+      
+      // Pie Chart
+      const kbStats = stats.knowledgeBase?.byCategory || {};
+      const labels = Object.keys(kbStats).map(k => {
+        const cat = kbStats[k];
+        return cat?.name || k;
+      });
+      const data = Object.values(kbStats).map(k => k?.count || 0);
+      const colors = Object.keys(kbStats).map(k => categoryColors[k]?.border || '#666');
+      
+      const ctx = document.getElementById('kbPieChart').getContext('2d');
+      
+      if (kbPieChart) kbPieChart.destroy();
+      
+      kbPieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: colors,
+            borderWidth: 0,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          cutout: '65%'
+        }
+      });
+      
+      // Category Breakdown
+      const breakdownHtml = Object.entries(kbStats).map(([key, cat]) => {
+        const total = stats.knowledgeBase?.totalItems || 1;
+        const percent = Math.round((cat.count / total) * 100);
+        const color = categoryColors[key];
+        
+        return `
+          <div class="category-row">
+            <div class="category-icon" style="background: ${color.bg}; color: ${color.border}">${color.icon}</div>
+            <div class="category-info">
+              <div class="category-name">${cat.name}</div>
+            </div>
+            <div class="category-bar">
+              <div class="category-bar-fill" style="width: ${percent}%; background: ${color.border}"></div>
+            </div>
+            <div class="category-count">${cat.count}</div>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('categoryBreakdown').innerHTML = breakdownHtml || '<div class="text-muted">No data</div>';
+      
+      // Upcoming events
+      document.getElementById('upcomingEvents').textContent = stats.events?.upcoming || 0;
+    }
+    
+    // Modal
+    function openModal() {
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('addTaskForm').reset();
+    }
+    
+    document.getElementById('addTaskForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const task = {
+        title: document.getElementById('taskTitle').value,
+        category: document.getElementById('taskCategory').value,
+        priority: document.getElementById('taskPriority').value,
+        dueDate: document.getElementById('taskDueDate').value || null
+      };
+      
+      try {
+        const res = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(task)
+        });
+        
+        if (res.ok) {
+          const newTask = await res.json();
+          tasks.push(newTask);
+          renderTasks();
+          closeModal();
+        }
+      } catch (err) {
+        console.error('Error adding task:', err);
+      }
+    });
+    
+    // Close modal on overlay click
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+    
+    // Utilities
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
   </script>
 </body>
 </html>
