@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Cap - Personal Knowledge Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Soul Cap Dashboard</h1>
+            <p class="subtitle">Personal Knowledge Base & Task Manager</p>
+            <div class="last-update" id="lastUpdate"></div>
+        </header>
+
+        <main>
+            <section class="kb-overview">
+                <h2>📚 Knowledge Base Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalItems">0</div>
+                        <div class="stat-label">Total Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCategories">0</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                </div>
+                
+                <h3>Category Breakdown</h3>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <section class="tasks-section">
+                <h2>✅ Task Management</h2>
+                <div class="tasks-list" id="tasksList">
+                    <p class="no-tasks">No tasks yet. Add some to get started!</p>
+                </div>
+            </section>
+
+            <section class="calendar-section">
+                <h2>📅 Daily View</h2>
+                <p class="calendar-hint">Click on a date to see tasks and items for that day</p>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="day-detail" id="dayDetail" style="display: none;">
+                    <h3 id="dayDetailTitle">Tasks for Selected Date</h3>
+                    <div class="day-items" id="dayItems"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Powered by Knowledge Base Agent | Last synced: <span id="syncTime">-</span></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
