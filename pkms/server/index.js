@@ -7,6 +7,7 @@ import cron from 'node-cron';
 
 import todosRouter from './routes/todos.js';
 import notesRouter from './routes/notes.js';
+import slackRouter from './routes/slack.js';
 import ReminderService from './services/reminder.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // API Routes
 app.use('/api/todos', todosRouter);
 app.use('/api/notes', notesRouter);
+app.use('/api/slack', slackRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {
