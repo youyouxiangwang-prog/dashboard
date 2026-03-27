@@ -1,0 +1,23 @@
+{
+  "name": "pkms",
+  "version": "1.0.0",
+  "description": "Personal Knowledge Management System for Youxiang Wang",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "cron": "node scripts/reminder-cron.js",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": ["pkm", "knowledge-management", "todos", "notes"],
+  "author": "OpenClaw",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "marked": "^12.0.0",
+    "node-cron": "^3.0.3",
+    "uuid": "^9.0.1"
+  }
+}
